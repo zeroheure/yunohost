@@ -63,6 +63,30 @@ do_pre_regen() {
   cd /usr/share/yunohost/templates/ssl
 
   install -D -m 644 openssl.cnf "${pending_dir}/${ssl_dir}/openssl.cnf"
+
+  selfCA_conf="${ssl_dir}/openssl.ca.cnf"
+  current_selfCA_domain=$(grep "commonName_default" $selfCA_conf | awk '{print  $3}')
+  main_domain=$(cat /etc/yunohost/current_host)
+
+  # If main domain changed, regen the self-signing CA
+  if [[ "${current_selfCA_domain}" != "${main_domain}" ]]
+  then
+      echo "Main domain changed, regenerating the self-signing certification authority"
+      mkdir -p "${pending_dir}/${ssl_dir}"
+      echo "01" > "${pending_dir}/${ssl_dir}/serial"
+      touch "${pending_dir}/${ssl_dir}/index.txt"
+      cp "${pending_dir}/${ssl_dir}/openssl.cnf" "${pending_dir}/${ssl_dir}/openssl.ca.cnf"
+      sed -i "s/yunohost.org/${main_domain}/g" "${pending_dir}/${ssl_dir}/openssl.ca.cnf"
+      openssl req -x509 -new                                     \
+              -config "${pending_dir}/${ssl_dir}/openssl.ca.cnf" \
+              -out    "${pending_dir}/${ssl_dir}/ca/cacert.pem"  \
+              -keyout "${pending_dir}/${ssl_dir}/ca/cakey.pem"   \
+              -days 3650                                         \
+              -nodes                                             \
+              -batch
+      mkdir -p "${pending_dir}/etc/ssl/certs/"
+      cp "${pending_dir}/${ssl_dir}/ca/cacert.pem" "${pending_dir}/etc/ssl/certs/ca-yunohost_crt.pem"
+  fi
 }
 
 do_post_regen() {
@@ -83,7 +107,9 @@ do_post_regen() {
     fi
   }
 
-  # TODO: regenerate certificates if conf changed?
+  [ -z "$regen_conf_files" ] && exit 0
+
+  update-ca-certificates
 }
 
 FORCE=${2:-0}
