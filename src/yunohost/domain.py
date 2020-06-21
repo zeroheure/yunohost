@@ -61,7 +61,11 @@ def domain_list(exclude_subdomains=False):
                 continue
         result_list.append(domain)
 
-    return {'domains': result_list}
+    result_list.sort()
+    return {
+        'domains': result_list,
+        'default': result_list.index(_get_maindomain())
+    }
 
 
 @is_unit_operation()
