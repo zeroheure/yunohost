@@ -54,24 +54,30 @@ test-i18n-keys:
   extends: .test-stage
   script:
     - python3 -m pytest tests tests/test_i18n_keys.py
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - locales/*
 
 test-translation-format-consistency:
   extends: .test-stage
   script:
     - python3 -m pytest tests tests/test_translation_format_consistency.py
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - locales/*
 
 test-actionmap:
   extends: .test-stage
   script:
     - python3 -m pytest tests tests/test_actionmap.py
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - data/actionsmap/*.yml
 
 test-helpers:
@@ -79,8 +85,10 @@ test-helpers:
   script:
     - cd tests
     - bash test_helpers.sh
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - data/helpers.d/*
 
 test-apps:
@@ -88,8 +96,10 @@ test-apps:
   script:
     - cd src/yunohost
     - python3 -m pytest tests/test_apps.py
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - src/yunohost/app.py
 
 test-appscatalog:
@@ -97,8 +107,10 @@ test-appscatalog:
   script:
     - cd src/yunohost
     - python3 -m pytest tests/test_appscatalog.py
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - src/yunohost/app.py
 
 test-appurl:
@@ -106,8 +118,10 @@ test-appurl:
   script:
     - cd src/yunohost
     - python3 -m pytest tests/test_appurl.py
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - src/yunohost/app.py
 
 test-apps-arguments-parsing:
@@ -115,8 +129,10 @@ test-apps-arguments-parsing:
   script:
     - cd src/yunohost
     - python3 -m pytest tests/test_apps_arguments_parsing.py
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - src/yunohost/app.py
 
 test-changeurl:
@@ -124,8 +140,10 @@ test-changeurl:
   script:
     - cd src/yunohost
     - python3 -m pytest tests/test_changeurl.py
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - src/yunohost/app.py
 
 test-backuprestore:
@@ -133,8 +151,10 @@ test-backuprestore:
   script:
     - cd src/yunohost
     - python3 -m pytest tests/test_backuprestore.py
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - src/yunohost/backup.py
 
 test-permission:
@@ -142,8 +162,10 @@ test-permission:
   script:
     - cd src/yunohost
     - python3 -m pytest tests/test_permission.py
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - src/yunohost/permission.py
 
 test-settings:
@@ -151,8 +173,10 @@ test-settings:
   script:
     - cd src/yunohost
     - python3 -m pytest tests/test_settings.py
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - src/yunohost/settings.py
 
 test-user-group:
@@ -160,8 +184,10 @@ test-user-group:
   script:
     - cd src/yunohost
     - python3 -m pytest tests/test_user-group.py
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - src/yunohost/user.py
 
 test-regenconf:
@@ -169,8 +195,10 @@ test-regenconf:
   script:
     - cd src/yunohost
     - python3 -m pytest tests/test_regenconf.py
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - src/yunohost/regenconf.py
 
 test-service:
@@ -178,6 +206,8 @@ test-service:
   script:
     - cd src/yunohost
     - python3 -m pytest tests/test_service.py
-  only:
-    changes:
+  rules:
+    - !reference [.on_default_branch_rules, rules]
+    - !reference [.on_tags_rules, rules]
+    - changes:
       - src/yunohost/service.py

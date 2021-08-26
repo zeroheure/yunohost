@@ -23,5 +23,5 @@ generate-helpers-doc:
   artifacts:
     paths:
       - doc/helpers.md
-  only:
-    - tags
+  rules:
+    - !reference [.on_tags_rules, rules]
