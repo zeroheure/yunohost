@@ -26,5 +26,13 @@ workflow:
 variables:
   YNH_BUILD_DIR: "ynh-build"
 
+.on_default_branch_rules:
+    rules:
+        - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+.on_tags_rules:
+    rules:
+        - if: $CI_COMMIT_TAG
+
 include:
   - local: .gitlab/ci/*.gitlab-ci.yml
