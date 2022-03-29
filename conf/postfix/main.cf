@@ -177,14 +177,6 @@ smtp_header_checks = regexp:/etc/postfix/header_checks
 
 smtp_reply_filter = pcre:/etc/postfix/smtp_reply_filter
 
-# Rmilter
-milter_mail_macros =  i {mail_addr} {client_addr} {client_name} {auth_authen}
-milter_protocol = 6
-smtpd_milters = inet:localhost:11332
-
-# Skip email without checking if milter has died
-milter_default_action = accept
-
 # Avoid to send simultaneously too many emails
 smtp_destination_concurrency_limit = 2
 default_destination_rate_delay = 5s
@@ -207,3 +199,16 @@ smtp_sasl_security_options = noanonymous
 # where to find sasl_passwd
 smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
 {% endif %}
+
+#
+# Scan messages on Rspamd daemon via Milter protocol 
+# (Rspamd proxy worker integration)
+# see corresponding rspamd conf in /etc/rspamd/worker-proxy.inc
+#
+#smtpd_milters = unix:/var/lib/rspamd/milter.sock
+# or for TCP socket (proxy worker is listening on *:11332 by default):
+smtpd_milters = inet:localhost:11332
+# if something goes wrong, do not checks and skip mail
+milter_default_action = accept
+# 6 is the default milter protocol version since Postfix 2.6
+# milter_protocol = 6
